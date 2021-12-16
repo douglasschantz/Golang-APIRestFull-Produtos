@@ -8,7 +8,6 @@ type Service interface {
 	InsertProduct(params *getAddProductRequest) (int64, error)
 	UpdateProduct(params *updateProductRequest) (int64, error)
 	DeleteProduct(params *deleteProductRequest) (int64, error)
-	//GetBestSellers() (*ProductTopResponse, error)
 }
 
 type service struct {
@@ -45,14 +44,3 @@ func (s *service) UpdateProduct(params *updateProductRequest) (int64, error) {
 func (s *service) DeleteProduct(params *deleteProductRequest) (int64, error) {
 	return s.repo.DeleteProduct(params)
 }
-
-/*
-func (s *service) GetBestSellers() (*ProductTopResponse, error) {
-	products, err := s.repo.GetBestSellers()
-	utils.ErrorPanic(err)
-	totalVentas, err := s.repo.GetTotalVentas()
-	utils.ErrorPanic(err)
-
-	return &ProductTopResponse{Data: products, TotalVentas: totalVentas}, err
-}
-*/

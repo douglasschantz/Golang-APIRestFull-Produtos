@@ -127,21 +127,3 @@ func makeDeleteProductEndpoint(s Service) endpoint.Endpoint {
 	}
 	return deleteProductEndPoint
 }
-
-/*
-
-// @Summary Best Sellers
-// @Tags Producto
-// @Accept json
-// @Produce  json
-// @Success 200 {object} product.ProductTopResponse "ok"
-// @Router /products/bestSellers [get]
-func makeBestSellersEndpoint(s Service) endpoint.Endpoint {
-	getBestSellersEndpoint := func(ctx context.Context, request interface{}) (interface{}, error) {
-		result, err := s.GetBestSellers()
-		utils.ErrorPanic(err)
-		return result, nil
-	}
-	return getBestSellersEndpoint
-}
-*/

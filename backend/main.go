@@ -12,33 +12,20 @@ import (
 func main() {
 
 	database.InitDB()
-	dtbConn := database.ReturnDB()
 
 	var (
-		productRepository = product.NewRepository(dtbConn)
-		/*employeeRepository = employee.NewRepository(databaseConnection)
-		customerRepository = customer.NewRepository(databaseConnection)
-		orderRepository    = order.NewRepository(databaseConnection)*/
+		productRepository = product.NewRepository(database.ReturnDB())
 	)
 
 	var (
 		productService product.Service
-		//employeeService employee.Service
-		//customerService customer.Service
-		//orderService    order.Service
 	)
 
 	productService = product.NewService(productRepository)
-	/*employeeService = employee.NewService(employeeRepository)
-	customerService = customer.NewService(customerRepository)
-	orderService = order.NewService(orderRepository)*/
 
 	r := chi.NewRouter()
 
 	r.Mount("/products", product.MakeHttpHandler(productService))
-	/*r.Mount("/employees", employee.MakeHttpHandler(employeeService))
-	r.Mount("/customers", customer.MakeHTTPHandler(customerService))
-	r.Mount("/orders", order.MakeHTTPHandler(orderService))*/
 
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("../swagger/doc.json"),

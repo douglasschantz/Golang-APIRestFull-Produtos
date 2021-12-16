@@ -14,8 +14,6 @@ type Repository interface {
 	InsertProduct(params *getAddProductRequest) (int64, error)
 	UpdateProduct(params *updateProductRequest) (int64, error)
 	DeleteProduct(params *deleteProductRequest) (int64, error)
-	//GetBestSellers() ([]*ProductTop, error)
-	//GetTotalVentas() (float64, error)
 }
 
 type repository struct {
@@ -30,8 +28,6 @@ func (repo *repository) GetProductById(productId int) (*Product, error) {
 
 	product := &Product{}
 
-	//database.ReturnDB().First(&product, productId)
-
 	database.ReturnDB().Raw("SELECT id,product_code,product_name,COALESCE(description,''), standard_cost, list_price, category FROM products WHERE id = ?", productId).Scan(&product)
 	fmt.Println("1teste:", product)
 
@@ -41,16 +37,6 @@ func (repo *repository) GetProductById(productId int) (*Product, error) {
 func (repo *repository) GetProducts(params *getProductsRequest) ([]*Product, error) {
 	product := []*Product{}
 	fmt.Println(params.Limit, params.Offset)
-
-	/*
-			json
-			{
-		    "limit": 10,
-		    "offset":0
-		}
-	*/
-
-	//database.ReturnDB().Select([]string{"id", "product_code", "product_name", "COALESCE(description,' ')", "standard_cost", "list_price", "category"}).Find(&product)
 
 	database.ReturnDB().Raw("SELECT id,product_code,product_name,COALESCE(description,''), standard_cost,list_price, category FROM products	LIMIT ? OFFSET ?", params.Limit, params.Offset).Scan(&product)
 	fmt.Println("2teste:", product)
@@ -63,8 +49,6 @@ func (repo *repository) GetProducts(params *getProductsRequest) ([]*Product, err
 }
 
 func (repo *repository) GetTotalProducts() (int, error) {
-
-	//database.ReturnDB().Select([]string{"COUNT(*)"}).Find(&product)
 
 	type Total struct {
 		sum_total int
@@ -114,38 +98,3 @@ func (repo *repository) DeleteProduct(params *deleteProductRequest) (int64, erro
 
 	return 1, nil
 }
-
-/*
-func (repo *repository) GetBestSellers() ([]*ProductTop, error) {
-	const sql = `SELECT
-	                od.product_id,
-					p.product_name,
-					SUM(od.quantity*od.unit_price) vendido
-				FROM order_details od
-				inner join products p on od.product_id = p.id
-				GROUP by od.product_id
-				ORDER BY vendido desc
-				limit 10`
-	results, err := repo.db.Query(sql)
-	utils.ErrorPanic(err)
-
-	var products []*ProductTop
-	for results.Next() {
-		product := &ProductTop{}
-		err = results.Scan(&product.ID, &product.ProductName, &product.Vendidos)
-		utils.ErrorPanic(err)
-		products = append(products, product)
-	}
-
-	return products, nil
-}
-func (repo *repository) GetTotalVentas() (float64, error) {
-	const sql = `SELECT SUM(od.quantity*od.unit_price) vendido
-	FROM order_details od`
-	var total float64
-	row := repo.db.QueryRow(sql)
-	err := row.Scan(&total)
-	utils.ErrorPanic(err)
-	return total, nil
-}
-*/
