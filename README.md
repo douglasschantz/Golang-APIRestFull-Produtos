@@ -4,5 +4,4 @@
 
 Projeto em desenvolvimento através do curso da UDEMY
 
-<schantzdouglas@gmail.com>
 
